@@ -10,18 +10,26 @@ public class TimeController : MonoBehaviour
     private GameObject secArrow, minArrow, hourArrow;
     private ReadNetTime readNetTime;
     private TimeConvertions timeConvertions;
+    private BackgroundService backgroundService;
     private Text timeText;
 
     private byte dayOrNight, isAlarmChanging;
     private int currentTimeInSeconds, lastHour;
 
+    
+
     void Awake()
     {
         isAlarmChanging = 1;
+#if UNITY_ANDROID
+        backgroundService.
+#endif
     }
-
     void Start()
     {
+#if UNITY_STANDALONE_WIN
+        Debug.Log("This is Windows Platform");
+#endif
         Application.runInBackground = true;
 
         timeText = GameObject.FindGameObjectWithTag("TimeText").GetComponent<Text>();
@@ -34,7 +42,7 @@ public class TimeController : MonoBehaviour
         //Read time from ntp-server and start coroutine for increase seconds to currentTimeInSeconds variable
         currentTimeInSeconds = timeConvertions.DateTimeToSeconds(readNetTime.GetTime());
         StartCoroutine(Timer());
-        
+
         lastHour = currentTimeInSeconds / 3600 % 3600;
 
         //Show time
